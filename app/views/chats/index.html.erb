@@ -1,0 +1,21 @@
+
+
+<div id="chat">
+	<ul>
+		<% @chats.each do |chat| %>
+			<li>
+				<%= link_to "x", chat_path(chat), :method=>:delete %>
+				<%= chat.content %> 
+			</li>
+		<% end %>
+	</ul>
+</div>
+
+<hr>
+<div class="chat-form">
+	<%= form_for @chat do |form| %>
+		<%= form.text_field :content %>
+	<% end %>
+</div>
+
+
