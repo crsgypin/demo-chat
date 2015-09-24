@@ -14,7 +14,7 @@
 <hr>
 <div class="chat-form">
 	<%= form_for @chat do |form| %>
-		<%= form.text_field :content %>
+		<%= form.text_field :content, :id=>"chat-input" %>
 	<% end %>
 </div>
 

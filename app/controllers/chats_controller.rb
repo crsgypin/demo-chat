@@ -5,11 +5,11 @@ class ChatsController < ApplicationController
 		@chats = Chat.all
 	end
 
-	def create
-		@chat = Chat.new(chat_params)
-		@chat.save
-		redirect_to chats_path
-	end
+	# def create
+	# 	@chat = Chat.new(chat_params)
+	# 	@chat.save
+	# 	redirect_to chats_path
+	# end
 
 	def destroy
 		@chat = Chat.find(params[:id])
