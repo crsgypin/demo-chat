@@ -19,3 +19,39 @@
 </div>
 
 
+<script>
+
+(function() {
+  var client;
+
+  client = new Faye.Client('/faye');
+
+  client.subscribe('/chat', function(payload) {
+    return $('#chat ul').append("<li> " + payload.content + "</li>");
+  });
+
+  $(document).ready(function() {
+    var input;
+    input = $('#chat-input');
+    return $('form#new_chat').submit(function(event) {
+      var publication;
+      console.log(input.val());
+      publication = client.publish('/chat', {
+        content: input.val()
+      });
+      publication.callback(function() {
+        return input.val('');
+      });
+      publication.errback(function() {});
+      event.preventDefault();
+      return false;
+    });
+  });
+
+  window.client = client;
+
+}).call(this);
+
+
+</script>
+
