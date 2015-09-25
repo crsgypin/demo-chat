@@ -1,0 +1,21 @@
+
+
+<div id="messages">
+	<ul>
+		<% @messages.each do |message| %>
+			<li>
+				<%= link_to "x", message_path(message), :method=>:delete %>
+				<%= message.content %> 
+			</li>
+		<% end %>
+	</ul>
+</div>
+
+<hr>
+<div class="message-form">
+	<%= form_for @message do |form| %>
+		<%= form.text_field :content, :id=>"message-input" %>
+	<% end %>
+</div>
+
+
