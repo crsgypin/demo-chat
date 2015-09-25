@@ -1,9 +1,9 @@
 # config valid only for current version of Capistrano
 lock '3.4.0'
 
-set :application, 'my_app_name'
+set :application, 'demochat'
 set :repo_url, 'git@github.com:crsgypin/demo-chat.git'
-set :deploy_to, '/home/deploy/demo-chat'
+set :deploy_to, '/home/deploy/demochat'
 set :keep_releases, 5
 set :linked_files, fetch(:linked_files, []).push('config/database.yml', 'config/secrets.yml','config/initializers/faye_token.rb')
 set :linked_dirs, fetch(:linked_dirs, []).push('log', 'tmp/pids', 'tmp/cache', 'tmp/sockets', 'vendor/bundle')
