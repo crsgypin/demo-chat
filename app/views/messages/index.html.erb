@@ -15,4 +15,13 @@
 	<% end %>
 </div>
 
+<!-- <script src="http://localhost:9292/faye/client.js"></script> -->
+<script>
+	$(document).ready(function(){
+		var faye = new Faye.Client('http://localhost:9292/faye');
+		faye.subscribe("/messages/new",function(payload){
+			eval(payload);
+		})		
+	});
 
+</script>
