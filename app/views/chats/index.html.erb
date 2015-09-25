@@ -27,6 +27,7 @@
   client = new Faye.Client('/faye');
 
   client.subscribe('/chat', function(payload) {
+    console.log(payload);
     return $('#chat ul').append("<li> " + payload.content + "</li>");
   });
 
