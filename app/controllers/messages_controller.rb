@@ -8,7 +8,10 @@ class MessagesController < ApplicationController
 	def create
 		@message = Message.new(message_params)
 		@message.save
-		redirect_to messages_path
+		respond_to do |format|
+			format.html {redirect_to messages_path}
+			format.js
+		end
 	end
 
 	def destroy

@@ -3,17 +3,14 @@
 <div id="messages">
 	<ul>
 		<% @messages.each do |message| %>
-			<li>
-				<%= link_to "x", message_path(message), :method=>:delete %>
-				<%= message.content %> 
-			</li>
+			<%= render :partial=>"messages/item", :locals=>{:message=>message} %>
 		<% end %>
 	</ul>
 </div>
 
 <hr>
 <div class="message-form">
-	<%= form_for @message do |form| %>
+	<%= form_for @message, :remote=>true do |form| %>
 		<%= form.text_field :content, :id=>"message-input" %>
 	<% end %>
 </div>
