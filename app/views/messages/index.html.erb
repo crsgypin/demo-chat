@@ -1,0 +1,27 @@
+
+
+<div id="messages">
+	<ul>
+		<% @messages.each do |message| %>
+			<%= render :partial=>"messages/item", :locals=>{:message=>message} %>
+		<% end %>
+	</ul>
+</div>
+
+<hr>
+<div class="message-form">
+	<%= form_for @message, :remote=>true do |form| %>
+		<%= form.text_field :content, :id=>"message-input" %>
+	<% end %>
+</div>
+
+<!-- <script src="http://localhost:9292/faye/client.js"></script> -->
+<script>
+	$(document).ready(function(){
+		var faye = new Faye.Client('http://localhost:9292/faye');
+		faye.subscribe("/messages/new",function(payload){
+			eval(payload);
+		})		
+	});
+
+</script>
