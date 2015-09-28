@@ -28,13 +28,14 @@ gem 'thin'
 gem 'capistrano-rails', group: :development
 gem 'capistrano-passenger', :group => :development
 gem 'mysql2'
+gem 'faye-redis'
 
 # Use ActiveModel has_secure_password
 # gem 'bcrypt', '~> 3.1.7'
 
 # Use Unicorn as the app server
 # gem 'unicorn'
-
+gem 'passenger'
 
 
 group :development, :test do
