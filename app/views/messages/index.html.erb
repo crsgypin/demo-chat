@@ -1,5 +1,5 @@
 
-
+<h1> Message with port 9292 </h1>
 <div id="messages">
 	<ul>
 		<% @messages.each do |message| %>
@@ -14,11 +14,13 @@
 		<%= form.text_field :content, :id=>"message-input" %>
 	<% end %>
 </div>
+<%= link_to "Chat middleware", chats_path, :style=>"display:block;margin: 40px 0 0 0;" %>
 
 <!-- <script src="http://localhost:9292/faye/client.js"></script> -->
 <script>
 	$(document).ready(function(){
-		var faye = new Faye.Client('http://localhost:9292/faye');
+		var faye = new Faye.Client('<%= request.protocol + request.host %>:9292/faye')
+		// var faye = new Faye.Client('http://localhost:9292/faye');
 		faye.subscribe("/messages/new",function(payload){
 			eval(payload);
 		})		

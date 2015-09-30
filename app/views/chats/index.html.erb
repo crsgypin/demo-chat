@@ -1,5 +1,6 @@
 
 
+<h1> Chat with middleware</h1>
 <div id="chat">
 	<ul>
 		<% @chats.each do |chat| %>
@@ -17,7 +18,7 @@
 		<%= form.text_field :content, :id=>"chat-input" %>
 	<% end %>
 </div>
-
+<%= link_to "Message 9292", messages_path, :style=>"display:block;margin: 40px 0 0 0;" %>
 
 <script>
 
