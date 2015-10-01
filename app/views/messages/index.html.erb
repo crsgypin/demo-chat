@@ -1,23 +1,30 @@
 
-<h1> Message with port 9292 </h1>
 <div id="messages">
-	<ul>
-		<% @messages.each do |message| %>
-			<li>
-				<!-- <span> <a href="" number="<%# message.id %>" class="remove"> X </a> </span> -->
-				<span style="display:inline-block;width:200px;"><%= message.content %> </span>
-				<span> <%= message.created_at.strftime('%F %X') %> </span>
-			</li>
-		<% end %>
-	</ul>
-</div>
+	<h1> Hi <%= session[:user] %>  </h1>
+	<span> <%= link_to "離開", users_path, :method=>:destroy%></span>
+	<div class="content">
+		<ul>
+			<% @messages.each do |message| %>
+				<li>
+					<!-- <span> <a href="" number="<%# message.id %>" class="remove"> X </a> </span> -->
+					<span class="content"> <%= message.content %> </span>
+					<span class="username"> <%= message.username %> </span>
+					<span> <%= message.created_at.strftime('%m/%d %X') %> </span>
+				</li>
+			<% end %>
+		</ul>
+		
+	</div>
 
-<hr>
-<div class="message-form">
-	<%= form_for @message, :remote=>true do |form| %>
-		<%= form.text_field :content, :id=>"message-input" %>
-		<%= form.submit "送出" %>
-	<% end %>
+	<hr>
+	<div class="message-form">
+		<%= form_for @message, :remote=>true do |form| %>
+			<%= "#{@user}:" %>
+			<%= form.hidden_field :username %>
+			<%= form.text_field :content, :id=>"message-input" %>
+			<%= form.submit "送出" %>
+		<% end %>
+	</div>
 </div>
 
 <!-- <script src="http://<%#request.host%>:443/faye/client.js"></script> -->
@@ -55,13 +62,12 @@ $(document).ready(function(){
 	var faye = new Faye.Client('<%= request.protocol + request.host %>:443/faye')
 	faye.subscribe("/messages/new",function(payload){
 		var data = JSON.parse(payload);
-		var content = data['message']['content'];
-		var created_at = data['message']['created_at'];
 		(function(){
 			$('#messages ul').append(
 					'<li>' + 
-						'<span style="display:inline-block;width:200px;">'  + content + '</span>' +
-						'<span> ' + created_at + '</span>' + 
+						'<span class="content"> '  + data['message']['content'] + ' </span>' +
+						'<span class="username">'  + data['message']['username'] + ' </span>' +
+						'<span> ' + data['message']['created_at'] + ' </span>' + 
 					'</li>')
 
 			$($('#messages ul').find('li')[0]).remove();

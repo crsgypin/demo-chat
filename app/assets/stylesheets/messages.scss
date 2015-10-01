@@ -1,3 +1,26 @@
-// Place all the styles related to the messages controller here.
-// They will automatically be included in application.css.
-// You can use Sass (SCSS) here: http://sass-lang.com/
+
+
+#messages{
+	margin:20px auto; width:70%;
+
+	li{
+		list-style: none;
+	}
+
+	span.content{
+		margin: 0 0 0 -40px;
+		display:block;
+		float:left;
+		width:60%;
+	}
+
+	span.username{
+		display:block;
+		float:left;
+		width:20%;
+	}
+
+	
+
+}
+

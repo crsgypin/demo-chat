@@ -1,7 +1,8 @@
 class MessagesController < ApplicationController
+	before_action :check_user
 
 	def index 
-		@message = Message.new
+		@message = Message.new(:username=>@user)
 		@messages = Message.last(15)
 	end
 
@@ -26,6 +27,15 @@ class MessagesController < ApplicationController
 private
 
 	def message_params
-		params.require(:message).permit(:content)
+		params.require(:message).permit(:content, :username)
 	end
+
+	def check_user
+		if session[:user].present?
+			@user = session[:user]
+		else
+			redirect_to users_path	
+		end
+	end
+
 end

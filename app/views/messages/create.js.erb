@@ -1,6 +1,6 @@
 
 <% broadcast "/messages/new" do %>
 
-	<%= {:message=>{:content=>@message.content,:created_at=>@message.created_at.strftime('%F %X')}}.to_json.html_safe %>
+	<%= {:message=>{:content=>@message.content,:username=>@message.username,:created_at=>@message.created_at.strftime('%m/%d %X')}}.to_json.html_safe %>
 <% end %>
 
