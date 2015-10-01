@@ -59,7 +59,7 @@ $('.message-form').on('submit','form',function(event){
 
 
 $(document).ready(function(){
-	var faye = new Faye.Client('<%= request.protocol + request.host %>:443/faye')
+	var faye = new Faye.Client('<%= request.protocol + request.host %>/faye')
 	faye.subscribe("/messages/new",function(payload){
 		var data = JSON.parse(payload);
 		(function(){
