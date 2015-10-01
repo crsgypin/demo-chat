@@ -1,7 +1,9 @@
 <%# message %>
 
 <li>
-	<%= link_to "x", message_path(message), :method=>:delete %>
-	<%= message.content %> 
+	<span> <%= link_to "x", message_path(message), :method=>:delete %> </span>
+	<span style="display:inline-block;width:200px;"><%= message.content %> </span>
+	<span> <%= message.created_at.strftime('%F %X') %> </span>
+
 </li>
 
