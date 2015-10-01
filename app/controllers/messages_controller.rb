@@ -2,7 +2,7 @@ class MessagesController < ApplicationController
 
 	def index 
 		@message = Message.new
-		@messages = Message.all
+		@messages = Message.last(15)
 	end
 
 	def create
@@ -17,7 +17,10 @@ class MessagesController < ApplicationController
 	def destroy
 		@message = Message.find(params[:id])
 		@message.destroy
-		redirect_to messages_path
+		respond_to do |format|
+			format.js
+			format.json {render :json=>{:result=>"ok"}}
+		end
 	end
 
 private
@@ -25,6 +28,4 @@ private
 	def message_params
 		params.require(:message).permit(:content)
 	end
-
-
 end

@@ -3,7 +3,11 @@
 <div id="messages">
 	<ul>
 		<% @messages.each do |message| %>
-			<%= render :partial=>"messages/item", :locals=>{:message=>message} %>
+			<li>
+				<!-- <span> <a href="" number="<%# message.id %>" class="remove"> X </a> </span> -->
+				<span style="display:inline-block;width:200px;"><%= message.content %> </span>
+				<span> <%= message.created_at.strftime('%F %X') %> </span>
+			</li>
 		<% end %>
 	</ul>
 </div>
@@ -12,16 +16,59 @@
 <div class="message-form">
 	<%= form_for @message, :remote=>true do |form| %>
 		<%= form.text_field :content, :id=>"message-input" %>
+		<%= form.submit "送出" %>
 	<% end %>
 </div>
 
 <!-- <script src="http://<%#request.host%>:443/faye/client.js"></script> -->
 <script>
-	$(document).ready(function(){
-		var faye = new Faye.Client('<%= request.protocol + request.host %>:443/faye')
-		faye.subscribe("/messages/new",function(payload){
-			eval(payload);
-		})		
+
+$("#messages").on('click',".remove", function(e){
+	e.preventDefault();
+	var li = $(this).closest('li')
+
+	$.ajax({
+		method:'delete',
+		url: '/messages/' + $(this).attr('number'),
+		dataType: 'json',
+		data: "",
+		success: function(data){
+			if (data['result'] == 'ok'){
+				li.remove();
+			}
+		},
+		errors: function(data){
+			console.log('error' + data)
+		}
 	});
+});
+
+$('.message-form').on('submit','form',function(event){
+	if (!$('#message-input').val()){
+		return false;
+	}
+
+})
+
+
+$(document).ready(function(){
+	var faye = new Faye.Client('<%= request.protocol + request.host %>:443/faye')
+	faye.subscribe("/messages/new",function(payload){
+		var data = JSON.parse(payload);
+		var content = data['message']['content'];
+		var created_at = data['message']['created_at'];
+		(function(){
+			$('#messages ul').append(
+					'<li>' + 
+						'<span style="display:inline-block;width:200px;">'  + content + '</span>' +
+						'<span> ' + created_at + '</span>' + 
+					'</li>')
+
+			$($('#messages ul').find('li')[0]).remove();
+
+			$('#message-input').val("");
+		})();
+	})		
+});
 
 </script>

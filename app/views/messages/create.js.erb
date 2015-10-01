@@ -1,5 +1,6 @@
 
 <% broadcast "/messages/new" do %>
-	$('#messages ul').append('<%= j render(:partial=>"messages/item", :locals=>{:message=>@message}) %>')
+
+	<%= {:message=>{:content=>@message.content,:created_at=>@message.created_at.strftime('%F %X')}}.to_json.html_safe %>
 <% end %>
 
