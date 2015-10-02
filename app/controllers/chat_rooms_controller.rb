@@ -1,4 +1,5 @@
 class ChatRoomsController < ApplicationController
+  before_action :check_user
   before_action :set_chat_room, only: [:show, :edit, :update, :destroy]
 
   def index

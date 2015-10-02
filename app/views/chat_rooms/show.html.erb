@@ -25,7 +25,8 @@
 	</table>
 	<hr>
 	<%= form_for @chat_room.letters.new, :url=>chat_room_letters_path(@chat_room), :remote=>true do |form| %>
-		<%= form.text_field :content %>
+		<%= session[:user] %>
+		<%= form.text_field :content, :id=>"letter-input" %>
 		<%= form.submit "送出" %>
 	<% end %>
 </div>
@@ -51,6 +52,7 @@
 		var faye = new Faye.Client('<%= request.protocol + request.host %>:3000/faye')
 		subscription = faye.subscribe("/message/<%=@chat_room.channel%>",function(payload){
 			$('#chat-room-messages table tbody').append(item(payload['content'],payload['created_at'],payload['username']));
+			$('#letter-input').val("");
 			checkNumber();
 		})		
 
