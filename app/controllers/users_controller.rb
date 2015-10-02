@@ -2,7 +2,7 @@ class UsersController < ApplicationController
 
 	def create 
 		session[:user] = params[:user]
-		redirect_to messages_path
+		redirect_to chat_rooms_path
 	end
 
 	def destroy 

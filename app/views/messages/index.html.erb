@@ -59,7 +59,11 @@ $('.message-form').on('submit','form',function(event){
 
 
 $(document).ready(function(){
-	var faye = new Faye.Client('<%= request.protocol + request.host %>/faye')
+	<% if Rails.env.production? %>
+		var faye = new Faye.Client('<%= request.protocol + request.host %>/faye')
+	<% else %>
+		var faye = new Faye.Client('<%= request.protocol + request.host %>:9292/faye')
+	<% end %>
 	faye.subscribe("/messages/new",function(payload){
 		var data = JSON.parse(payload);
 		(function(){

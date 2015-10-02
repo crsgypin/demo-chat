@@ -1,0 +1,69 @@
+<div class="container">
+	<p id="notice"><%= notice %></p>
+
+	<p>
+	  <strong>聊天室:</strong>
+	  <%= @chat_room.name %>
+	</p>
+
+	<div id="chat-room-messages">
+		<h3> 訊息 </h3>
+		<table style="width:50%">
+			<tbody>
+				<% @letters.each do |letter| %>
+					<tr>
+						<td width="50%"> <%= letter.content %> </td>
+						<td> <%= letter.username %> </td>
+						<td> <%= letter.created_at.strftime('%m/%d %X') %> </td>
+					</tr>
+				<% end %>
+			</tbody>
+		</table>
+		<hr>
+		<%= form_for @chat_room.letters.new, :url=>chat_room_letters_path(@chat_room), :remote=>true do |form| %>
+			<%= session[:user] %>
+			<%= form.text_field :content, :id=>"letter-input" %>
+			<%= form.submit "送出", :class=>"btn btn-primary btn-xs" %>
+		<% end %>
+	</div>
+
+	<div style="margin:40px 0 0 0;">
+		<%= link_to '離開聊天室', chat_rooms_path, :class=>"leave btn btn-warning btn-xs"%>	
+	</div>
+</div>
+
+<script type="text/javascript">
+		
+	function item(content,created_at,username){
+		return (
+			'<tr><td> ' + content + '</td><td>' + username + '</td><td>' + created_at + '</td></tr>'
+			)
+	}
+
+	function checkNumber(){
+		if ($('#chat-room-messages table tbody').find($('tr')).length >15 ){
+			$($('#chat-room-messages table tbody').find($('tr'))[0]).remove();
+		}
+	}
+
+
+	$(document).ready(function(){
+		<% if Rails.env.production? %>
+			var faye = new Faye.Client('<%= request.protocol + request.host %>/faye')
+		<% else %>
+			var faye = new Faye.Client('<%= request.protocol + request.host %>:9292/faye')
+		<% end %>
+		subscription = faye.subscribe("/message/<%=@chat_room.channel%>",function(payload){
+			$('#chat-room-messages table tbody').append(item(payload['content'],payload['created_at'],payload['username']));
+			$('#letter-input').val("");
+			checkNumber();
+		})		
+
+		$('.leave').click(function(e){
+			subscription.cancel();
+		})
+	})
+
+</script>
+
+

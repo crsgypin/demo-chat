@@ -1,0 +1,2 @@
+module ChatRoomLettersHelper
+end
