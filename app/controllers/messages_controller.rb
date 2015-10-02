@@ -30,12 +30,4 @@ private
 		params.require(:message).permit(:content, :username)
 	end
 
-	def check_user
-		if session[:user].present?
-			@user = session[:user]
-		else
-			redirect_to users_path	
-		end
-	end
-
 end

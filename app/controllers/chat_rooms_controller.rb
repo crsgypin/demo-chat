@@ -6,6 +6,7 @@ class ChatRoomsController < ApplicationController
   end
 
   def show
+    @letters = @chat_room.letters.last(10)
   end
 
   def new
@@ -43,7 +44,7 @@ class ChatRoomsController < ApplicationController
     @chat_room.destroy
     respond_to do |format|
       format.html { redirect_to chat_rooms_url, notice: 'Chat room was successfully destroyed.' }
-    end
+      end
   end
 
   private

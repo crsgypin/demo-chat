@@ -29,9 +29,12 @@ ActiveRecord::Schema.define(version: 20151002053949) do
   create_table "letters", force: :cascade do |t|
     t.string   "content"
     t.string   "username"
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
+    t.integer  "chat_room_id"
+    t.datetime "created_at",   null: false
+    t.datetime "updated_at",   null: false
   end
+
+  add_index "letters", ["chat_room_id"], name: "index_letters_on_chat_room_id"
 
   create_table "messages", force: :cascade do |t|
     t.string   "content"
