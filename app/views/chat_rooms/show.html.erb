@@ -1,34 +1,36 @@
 <div class="container">
-	<p id="notice"><%= notice %></p>
+	<div id="chat-room">
+		<p id="notice"><%= notice %></p>
 
-	<p>
-	  <strong>聊天室:</strong>
-	  <%= @chat_room.name %>
-	</p>
+		<p>
+		  <strong>聊天室:</strong>
+		  <%= @chat_room.name %>
+		</p>
 
-	<div id="chat-room-messages">
-		<h3> 訊息 </h3>
-		<table style="width:80%">
-			<tbody>
-				<% @letters.each do |letter| %>
-					<tr>
-						<td width="50%"> <%= letter.content %> </td>
-						<td> <%= letter.username %> </td>
-						<td> <%= letter.created_at.strftime('%m/%d %X') %> </td>
-					</tr>
-				<% end %>
-			</tbody>
-		</table>
-		<hr>
-		<%= form_for @chat_room.letters.new, :url=>chat_room_letters_path(@chat_room), :remote=>true do |form| %>
-			<%= session[:user] %>
-			<%= form.text_field :content, :id=>"letter-input" %>
-			<%= form.submit "送出", :class=>"btn btn-primary btn-xs" %>
-		<% end %>
-	</div>
+		<div id="chat-room-messages">
+			<h3> 訊息 </h3>
+			<table style="width:80%">
+				<tbody>
+					<% @letters.each do |letter| %>
+						<tr>
+							<td width="50%"> <%= letter.content %> </td>
+							<td> <%= letter.username %> </td>
+							<td> <%= letter.created_at.strftime('%m/%d %X') %> </td>
+						</tr>
+					<% end %>
+				</tbody>
+			</table>
+			<hr>
+			<%= form_for @chat_room.letters.new, :url=>chat_room_letters_path(@chat_room) do |form| %>
+				<%= session[:user] %>
+				<%= form.text_field :content, :id=>"letter-input" %>
+				<%= form.submit "送出", :class=>"btn btn-primary btn-xs" %>
+			<% end %>
+		</div>
 
-	<div style="margin:40px 0 0 0;">
-		<%= link_to '離開聊天室', chat_rooms_path, :class=>"leave btn btn-warning btn-xs"%>	
+		<div style="margin:40px 0 0 0;">
+			<%= link_to '離開聊天室', chat_rooms_path, :class=>"leave btn btn-warning btn-xs"%>	
+		</div>		
 	</div>
 </div>
 
@@ -46,6 +48,20 @@
 		}
 	}
 
+	$('#chat-room').on('submit','form',function(e){
+		e.preventDefault();
+		$.ajax({
+			url:$(this).attr('action'),
+			dataType:"json",
+			method:"post",
+			data: $(this).serialize(),
+			success:function(data){
+				if (data['result'] == 'Saved!'){
+					$('#letter-input').val("");
+				}
+			}
+		})
+	})
 
 	$(document).ready(function(){
 		<% if Rails.env.production? %>
@@ -55,7 +71,6 @@
 		<% end %>
 		subscription = faye.subscribe("/message/<%=@chat_room.channel%>",function(payload){
 			$('#chat-room-messages table tbody').append(item(payload['content'],payload['created_at'],payload['username']));
-			$('#letter-input').val("");
 			checkNumber();
 		})		
 
