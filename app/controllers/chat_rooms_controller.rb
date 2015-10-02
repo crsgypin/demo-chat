@@ -7,7 +7,7 @@ class ChatRoomsController < ApplicationController
   end
 
   def show
-    @letters = @chat_room.letters.last(10)
+    @letters = @chat_room.letters.last(15)
   end
 
   def new

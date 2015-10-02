@@ -17,7 +17,11 @@ private
 	end
 
 	def broadcast
-		uri = URI.parse("#{request.protocol}#{request.host}:3000/faye" )
+		if Rails.env.production?
+			uri = URI.parse("#{request.protocol}#{request.host}/faye" )
+		else
+			uri = URI.parse("#{request.protocol}#{request.host}:9292/faye" )
+		end
 		message = {:channel=>"/message/#{@chat_room.channel}", 
 					 	   :data=>{:content=>@letter.content, :created_at=> @letter.created_at.strftime('%m/%d %X'), :username=> @letter.username},
 							 :ext=>{:auth_token => FAYE_TOKEN}}
